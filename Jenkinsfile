@@ -5,7 +5,7 @@ pipeline {
         stage('clone git repo') {
             steps {
                 echo 'cloning git repository'
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git']])
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/intelliqittrainings/maven.git']])
             }
         }
         stage('build') {
