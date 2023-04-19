@@ -1,28 +1,25 @@
 pipeline {
-    agent {
-      node {
-            label 'slave1'
-           }
-    }
+    agent any
 
     stages {
-        stage('checkout code') {
+        stage('clone git repo') {
             steps {
-                echo 'retrieving code from GIT'
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/koddas/war-web-project.git']])
+                echo 'cloning git repository'
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git']])
             }
         }
         stage('build') {
             steps {
-                echo 'building the code'
+                echo 'building war file using maven'
                 sh 'mvn clean install'
             }
         }
-        stage('Deployment') {
+        stage('deploy using tomcat container') {
             steps {
-                echo 'Deploying to container'
-                deploy adapters: [tomcat8(credentialsId: 'tomcat/tomcat', path: '', url: 'http://172.31.19.81:8088')], contextPath: null, war: '**/*.war'
+                echo 'deploy using tomcat'
+                deploy adapters: [tomcat8(credentialsId: 'tomcat_java', path: '', url: 'http://172.31.20.13:8082')], contextPath: null, war: '**/*.war'
             }
         }
     }
 }
+
